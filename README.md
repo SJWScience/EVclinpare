@@ -89,3 +89,19 @@ snp-sites -v geneA.omegaALN -o geneA.output_variants.vcf
 
 ```
 > This is pretty cool it prints just the variants in the right order, now i just need a way to handle muliple entries that have the commas etc.
+
+```bash
+awk '{ n=split($3,arr,","); for(i=1;i<=n;i++) print $1,$2,arr[i] }' SAMTRIAL.txt | tr -d "[:blank:]" 
+
+awk '{ n=split($3,arr,","); for(i=1;i<=n;i++) print $1,$2,arr[i] }' SAMTRIAL.txt | tr -d "[:blank:]" | sed '1d' > OUTPUT.var
+
+```
+
+**How to automatically extract variants from the VCF files
+
+> After some work i finally got it going
+
+```bash
+awk '/#CHROM/ ,EOF { print $4,$2,$5 }' geneA.vcf | awk '{ n=split($3,arr,","); for(i=1;i<=n;i++) print $1,$2,arr[i] }' SAMTRIAL.txt | tr -d "[:blank:]" | sed '1d' > OUTPUT_geneA.var
+
+```
