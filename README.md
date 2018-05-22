@@ -102,6 +102,6 @@ awk '{ n=split($3,arr,","); for(i=1;i<=n;i++) print $1,$2,arr[i] }' SAMTRIAL.txt
 > After some work i finally got it going
 
 ```bash
-awk '/#CHROM/ ,EOF { print $4,$2,$5 }' geneA.vcf | awk '{ n=split($3,arr,","); for(i=1;i<=n;i++) print $1,$2,arr[i] }' SAMTRIAL.txt | tr -d "[:blank:]" | sed '1d' > OUTPUT_geneA.var
+awk '/#CHROM/ ,EOF { print $4,$2,$5 }' geneA.vcf | awk '{ n=split($3,arr,","); for(i=1;i<=n;i++) print $1,$2,arr[i] }' | tr -d "[:blank:]" | sed '1d' > OUTPUT_geneA.var
 
 ```
