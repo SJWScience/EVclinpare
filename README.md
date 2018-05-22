@@ -81,3 +81,11 @@ snp-sites -v geneA.omegaALN -o geneA.output_variants.vcf
 > The output from the above pipeline will give you a .vcf (variant call format) file. These can be opened by any text editor or can be shown in excel (recommended for inexperienced users). Where it will show the postion within the gene that has been mutated along with the reference residue and variant residue. There will also be a column for each genome you gave it with an integer corresponding to presence/absence of mutation - 1 being mutation corresponding to the first listed variant of that row, 2 is 2nd mutation in the same row . . . and so on. Most of the time there will only be one variant per postion, however, there are genes that are quite variable or have specific residues that are commonly mutated. In cases like this you will see multiple variants for the same potion and a genome may have a number above 1. If there is a * or an X it means there was either no sequence called at this postion (possible deletion) or unable to confidently call a residue (usually from the assembly being unsure about a specific base and assigning an ambiguous base to it. If these are issues for your analysis go back to the raw blast output and open it in a text editior and examine the genome(s) of interest to see if there is a deletion or if something else is happening. In my experience its sorta a coinflip as to if its a deletion or an assembly thing. Quite often it was the beginning or the end of a contig and thus the blast missed this region because the genomes contigs are not necessarily in order.
 
 > Input variants can be parsed into a program to call putative function of mutations - EG: provean. To get this working on command line is a bit of a nightmare in my experience, but once its done it is actually quite good.
+
+**Playing around with automated parsing of mutations in command line to streamline the entire process
+
+```bash
+ awk '/#CHROM/ ,EOF { print $4,$2,$5 }' fusA1.CFALTERNATE_ONLYCF.vcf > SAMTRIAL.txt
+
+```
+> This is pretty cool it prints just the variants in the right order, now i just need a way to handle muliple entries that have the commas etc.
