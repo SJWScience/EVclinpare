@@ -1,3 +1,5 @@
+export PATH=/Volumes/userdata/staff_groups/lamontlab/Documents/BLAST/output_files/mview-1.60.1/bin:$PATH
+export PATH=/Volumes/userdata/student_users/samtaylorwardell/provean-1.1.5/bin:$PATH
 for i
 in $(ls *.in | rev | cut -c 4- | rev)
 do
@@ -7,4 +9,10 @@ mview -top 500 -in blast output_results/"$i".blast -out fasta > output_results/"
 echo "$i" SNP-SITES
 snp-sites  -v output_results/"$i".blast.fasta -o output_results/"$i".output_variants.vcf
 awk '/#CHROM/ ,EOF { print $4,$2,$5 }' output_results/"$i".output_variants.vcf | awk '{ n=split($3,arr,","); for(i=1;i<=n;i++) print $1,$2,arr[i] }' | tr -d "[:blank:]" | sed '1d' > output_results/"$i".var
+echo "$i" provean
+if [ -f /Volumes/userdata/student_users/samtaylorwardell/provean-1.1.5/OUTPUTS/"$i".sss ]; then
+provean.sh --num_threads 100 -q "$i".in -v output_results/"$i".var --supporting_set /Volumes/userdata/student_users/samtaylorwardell/provean-1.1.5/OUTPUTS/"$i".sss --verbose | cat > output_results/"$i".prov$
+else
+provean.sh --num_threads 100 -q "$i".in -v output_results/"$i".var --save_supporting_set /Volumes/userdata/student_users/samtaylorwardell/provean-1.1.5/OUTPUTS/"$i".sss --verbose | cat > output_results/"$i"$
+fi
 done
