@@ -1,0 +1,10 @@
+for i
+in $(ls *.in | rev | cut -c 4- | rev)
+do
+tblastn -query "$i".in -db CF_020518 -out output_results/"$i".blast -num_threads 100 -max_hsps 1 -num_alignments 400
+echo "$i" MVIEW
+mview -top 500 -in blast output_results/"$i".blast -out fasta > output_results/"$i".blast.fasta
+echo "$i" SNP-SITES
+snp-sites  -v output_results/"$i".blast.fasta -o output_results/"$i".output_variants.vcf
+awk '/#CHROM/ ,EOF { print $4,$2,$5 }' output_results/"$i".output_variants.vcf | awk '{ n=split($3,arr,","); for(i=1;i<=n;i++) print $1,$2,arr[i] }' | tr -d "[:blank:]" | sed '1d' > output_results/"$i".var
+done
